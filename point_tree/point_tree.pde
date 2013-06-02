@@ -13,6 +13,7 @@ void setup() {
   
   background(0);
   lights();
+  
 }
 
 void draw() {
@@ -23,8 +24,8 @@ void draw() {
 }
 
 void render_point(PVector pt) {
-  print(pt.x);
+  pushMatrix();
   translate(int(pt.x), int(pt.y), int(pt.z));
-  
   sphere(sphereRadius);
+  popMatrix();
 }
