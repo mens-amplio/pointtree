@@ -1,4 +1,4 @@
-class Node() {
-  void init(x, y, z) 
+class Node {
+  void init(int x, int y, int z) {}
    
 }
