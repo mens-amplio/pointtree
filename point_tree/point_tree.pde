@@ -15,7 +15,7 @@ ArrayList <Node> allPointsFlat = new ArrayList();
 void setup() {
   size(canvasSize, canvasSize, P3D);
   // define an origin point
-  Node origin = new Node(null, 0, 0, 0);
+  Node origin = new Node(null, canvasSize / 2, canvasSize - sphereRadius, 0);
   
   // create the 0th level
   ArrayList <Node> zeroth = new ArrayList();
