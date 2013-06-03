@@ -1,48 +1,75 @@
+import unlekker.util.*;
+import unlekker.modelbuilder.*;
+import ec.util.*;
+
 int canvasSize = 500;
 int sphereRadius = 40;
 int counter = 0;
 int PERIOD_LIMIT = 50;
+int LEVEL_LIMIT = 2;
+int LEVEL_DENSITY = 3;
+int last_level = 0;
+ArrayList <ArrayList> allPoints = new ArrayList();
+ArrayList <Node> allPointsFlat = new ArrayList();
 
-PVector origin;
-ArrayList <PVector> allPoints;
 void setup() {
   size(canvasSize, canvasSize, P3D);
   // define an origin point
-  origin = new PVector(0, 0, 0);
-  allPoints = new ArrayList();
-  allPoints.add(origin);
+  Node origin = new Node(null, 0, 0, 0);
+  
+  // create the 0th level
+  ArrayList <Node> zeroth = new ArrayList();
+  zeroth.add(origin);
+  allPoints.add(zeroth);
+  // add the origin to the flat list used for rendering
+  allPointsFlat.add(origin);
   
   background(0);
   lights();
 }
 
 void draw() {
-  // periodically add to the list of points
-  if (counter < PERIOD_LIMIT) {
-    // DO ALL THE THINGS
-    counter++;
+  int lastLevelDepth = allPoints.size() - 1;
+  if (lastLevelDepth < LEVEL_LIMIT) {
+    // periodically add to the list of points
+    if (counter < PERIOD_LIMIT) {
+      counter++;
+    } else {
+      // reset counter
+      counter = 0;
+
+      ArrayList <Node> lastLevel = allPoints.get(lastLevelDepth);
+      ArrayList newLevel = new ArrayList();
+      
+      for (Node pt : lastLevel) {
+        for (int i = 0; i < LEVEL_DENSITY; i++) {
+          PVector parent = new PVector(pt.node.x, pt.node.y, pt.node.z);
+          Node n = new Node(parent);
+          n.setPosition();
+          newLevel.add(n);
+          allPointsFlat.add(n);
+        }
+      }
+      allPoints.add(newLevel);
+      
+      // render
+      for (Node pt : allPointsFlat) {
+        // draw point (as sphere, for the moment)
+        render_point(pt);
+      }
+    }
   } else {
-    // reset counter
-    counter = 0; 
-  }
-  
-  // draw
-  for (PVector pt : allPoints) {
-    // draw point
-    render_point(pt);
+    // Could exit here...
   }
 }
 
-void render_point(PVector pt) {
-  pushMatrix();
-  translate(int(pt.x), int(pt.y), int(pt.z));
-  sphere(sphereRadius);
-  popMatrix();
+void render_point(Node pt) {
+  translate(int(pt.node.x), abs(int(pt.node.y)), int(pt.node.z));
+  sphere(20);
+
+  println(pt.node.x + " " + pt.node.y + " " + pt.node.z);
 }
 
-
-a node has a parent point and a distance from the parent
-a node can have 1 to 2 children, unless its depth is sufficiently great
 
 
 
