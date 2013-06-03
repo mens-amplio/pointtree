@@ -6,16 +6,16 @@ int canvasSize = 500;
 int sphereRadius = 40;
 int counter = 0;
 int PERIOD_LIMIT = 50;
-int LEVEL_LIMIT = 2;
+int LEVEL_LIMIT = 7;
 int LEVEL_DENSITY = 3;
 int last_level = 0;
 ArrayList <ArrayList> allPoints = new ArrayList();
 ArrayList <Node> allPointsFlat = new ArrayList();
 
 void setup() {
-  size(canvasSize, canvasSize, P3D);
+  size(canvasSize, canvasSize + 300, P3D);
   // define an origin point
-  Node origin = new Node(null, canvasSize / 2, canvasSize - sphereRadius, 0);
+  Node origin = new Node(null, canvasSize / 2, (canvasSize + 300) - sphereRadius, 0);
   
   // create the 0th level
   ArrayList <Node> zeroth = new ArrayList();
@@ -24,7 +24,7 @@ void setup() {
   // add the origin to the flat list used for rendering
   allPointsFlat.add(origin);
   
-  background(0);
+  background(255);
   lights();
 }
 
@@ -64,9 +64,10 @@ void draw() {
 }
 
 void render_point(Node pt) {
-  translate(int(pt.node.x), abs(int(pt.node.y)), int(pt.node.z));
+  pushMatrix();
+  translate(int(pt.node.x), int(pt.node.y), int(pt.node.z));
   sphere(20);
-
+  popMatrix();
   println(pt.node.x + " " + pt.node.y + " " + pt.node.z);
 }
 

@@ -1,7 +1,7 @@
 class Node {
   PVector node;
   PVector parent;
-  private final int ROD_LENGTH = 50;
+  private final int ROD_LENGTH = 70;
   private final int DIVERGENT_ANGLE = 15; // degrees!
   
   Node(PVector nodeParent) {
@@ -14,9 +14,12 @@ class Node {
   }
   
   void setPosition() {
-    float x = this.parent.x + 50;
-    float y = (ROD_LENGTH * cos(DIVERGENT_ANGLE)) + this.parent.y;
-    float z = (ROD_LENGTH * sin(DIVERGENT_ANGLE)) + this.parent.z;
+    int xVariance = 20;
+    int yVariance = 20;
+    int[] multiplier = {-1, 1}; // Randomly toggle the point to the left or right of its parent.
+    float x = (ROD_LENGTH * sin(DIVERGENT_ANGLE)) + random(this.parent.x - xVariance, this.parent.x + xVariance) * multiplier[round(random(1))];
+    float y = (ROD_LENGTH * cos(DIVERGENT_ANGLE)) + random(this.parent.y - yVariance, this.parent.y + yVariance);
+    float z = this.parent.z + random(-10, 10);
     this.node = new PVector(x, y, z);
   }
   
