@@ -1,17 +1,13 @@
-import unlekker.util.*;
-import unlekker.modelbuilder.*;
-import ec.util.*;
-
 int canvasSize = 500;
 int sphereRadius = 40;
 int counter = 0;
 int PERIOD_LIMIT = 50;
-int LEVEL_LIMIT = 7;
+int LEVEL_LIMIT = 10;
 int LEVEL_DENSITY = 3;
+int[] ACCEPTABLE_DENSITIES = {1, 2}; // Pick a density randomly.
 int last_level = 0;
 ArrayList <ArrayList> allPoints = new ArrayList();
 ArrayList <Node> allPointsFlat = new ArrayList();
-
 void setup() {
   size(canvasSize, canvasSize + 300, P3D);
   // define an origin point
@@ -42,7 +38,14 @@ void draw() {
       ArrayList newLevel = new ArrayList();
       
       for (Node pt : lastLevel) {
-        for (int i = 0; i < LEVEL_DENSITY; i++) {
+        int currentAcceptedDensity;
+        if (lastLevelDepth < 2) {
+          currentAcceptedDensity = LEVEL_DENSITY;
+        } else {
+          currentAcceptedDensity = ACCEPTABLE_DENSITIES[round(random(1))];
+        }
+          
+        for (int i = 0; i < currentAcceptedDensity; i++) {
           PVector parent = new PVector(pt.node.x, pt.node.y, pt.node.z);
           Node n = new Node(parent);
           n.setPosition();
@@ -52,6 +55,7 @@ void draw() {
       }
       allPoints.add(newLevel);
       
+      
       // render
       for (Node pt : allPointsFlat) {
         // draw point (as sphere, for the moment)
@@ -60,6 +64,8 @@ void draw() {
     }
   } else {
     // Could exit here...
+    // Now you have a whole tree of points, 
+    // ready to be animated or dumped to a file
   }
 }
 
@@ -68,7 +74,6 @@ void render_point(Node pt) {
   translate(int(pt.node.x), int(pt.node.y), int(pt.node.z));
   sphere(20);
   popMatrix();
-  println(pt.node.x + " " + pt.node.y + " " + pt.node.z);
 }
 
 

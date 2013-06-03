@@ -14,7 +14,7 @@ class Node {
   }
   
   void setPosition() {
-    int xVariance = 20;
+    int xVariance = 10;
     int yVariance = 20;
     int[] multiplier = {-1, 1}; // Randomly toggle the point to the left or right of its parent.
     float x = (ROD_LENGTH * sin(DIVERGENT_ANGLE)) + random(this.parent.x - xVariance, this.parent.x + xVariance) * multiplier[round(random(1))];
